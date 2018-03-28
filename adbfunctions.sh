@@ -180,7 +180,7 @@ getpackagename() {
 function adblogcat()
 {
     ANDROID_DEVICE=$1
-    LOGFILE1=xxx_$ANDROID_SERIAL
+    LOGFILE1=xxx
     LOGFILE2=$(date "+logcat-%Y.%m.%d-%H.%M.%S_${ANDROID_SERIAL}.log")
 
     echo Clearing logs...
