@@ -209,6 +209,72 @@ adbreinst() {
     adb install "$apkfile"
 }
 
+# dump apk AndroidManifest.xml
+apkmani() {
+    apkfile=$1
+    aapt d xmltree $apkfile AndroidManifest.xml
+}
+
+gen_debug_key() {
+    keystore_file=~/.android_keystore
+    keytool -genkey -v -keystore $keystore_file -alias debug -keyalg RSA -keysize 2048 -validity 10000
+}
+
+resign_apk() {
+    apk_file=$1
+    if [ -z "$apk_file" ]; then
+        echo "Missing apk file arg"
+        return 1
+    fi
+
+    keystore_file=~/.android/debug.keystore
+    jarsigner -verbose -keystore $keystore_file \
+        -storepass android \
+        -keypass android \
+        $apk_file \
+        androiddebugkey
+
+}
+
+check_args() {
+    arg=$1
+    argname=$2
+    if [ -z "$arg" ]; then
+        echo "Missing $argname"
+        return 1
+    fi
+    return 0
+}
+
+
+adbstart() {
+    pkg=$1
+    activity=$2
+    if [ -z "$pkg" ]; then
+        echo "Missing package name"
+        return 1
+    fi
+    if [ -z "$activity" ]; then
+        echo "Missing activity"
+        return 1
+    fi
+
+    adb shell am start -n $pkg/$activity
+}
+
+adbdumpjob() {
+    pkg="$1"
+
+    if [ -z "$pkg" ]; then
+        echo "Missing package name"
+        return 1
+    fi
+
+    echo running shell..
+    adb shell dumpsys jobscheduler | grep -A19 " JOB.*$pkg.*SMSJobService"
+}
+
+export -f apkmani
 export -f adbclear
 export -f adbdevices
 export -f adbenter
@@ -223,5 +289,10 @@ export -f adbreinst
 export -f checkIfMissingArgument
 export -f ensure_adb_serial_set
 export -f adb_wrapper
+export -f gen_debug_key
+export -f adbstart
+export -f adbdumpjob
 
 alias madb="MULTI=1 adb_wrapper"
+alias adblog=adblogcat
+
