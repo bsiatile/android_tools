@@ -193,6 +193,11 @@ function adblogcat()
 function adbreinst()
 {
     apkfile=$1
+
+    if [ -z "$apkfile" ]; then
+        echo "Missing apkfile arg"
+        return 1
+    fi
     pkg=`getpackagename "$apkfile"`
 
     echo "Uninstalling $pkg"
