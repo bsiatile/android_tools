@@ -178,8 +178,7 @@ getpackagename() {
     echo $package
 }
 
-function adblogcat()
-{
+adblogcat() {
     ANDROID_DEVICE=$1
     LOGFILE1=xxx
     LOGFILE2=$(date "+logcat-%Y.%m.%d-%H.%M.%S_${ANDROID_SERIAL}.log")
@@ -192,8 +191,7 @@ function adblogcat()
 
 
 # Uninstall and install an apk given an apk file
-function adbreinst()
-{
+adbreinst() {
     apkfile=$1
 
     if [ -z "$apkfile" ]; then
