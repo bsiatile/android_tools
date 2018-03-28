@@ -39,6 +39,7 @@ adbdevices() {
     end
 
     if serial_list.length <= 1
+        puts 'serial_list length of 1'
       exit 0
     else
       print \"Enter a number if you want to set one of the above serial numbers: \"
@@ -149,11 +150,11 @@ ensure_adb_serial_set() {
     DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
     ruby -I $DIR -e "
       require \"android_devices\"
-   
+
       android_device = AndroidDevices.new
       android_device.exit_if_android_serial_env_invalid
     "
-   
+
     if [ $? -ne 0 ]; then
       adbdevices
     fi
@@ -188,6 +189,7 @@ function adblogcat()
     echo Logcat to file [$LOGFILE1] and [$LOGFILE2]
     adb $ANDROID_DEVICE logcat -v threadtime | tee $LOGFILE1 | tee $LOGFILE2
 }
+
 
 # Uninstall and install an apk given an apk file
 function adbreinst()
