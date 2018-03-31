@@ -39,7 +39,6 @@ adbdevices() {
     end
 
     if serial_list.length <= 1
-        puts 'serial_list length of 1'
       exit 0
     else
       print \"Enter a number if you want to set one of the above serial numbers: \"
@@ -198,6 +197,7 @@ adbreinst() {
         echo "Missing apkfile arg"
         return 1
     fi
+
     pkg=`getpackagename "$apkfile"`
 
     echo "Uninstalling $pkg"
@@ -233,7 +233,6 @@ resign_apk() {
         -keypass android \
         $apk_file \
         androiddebugkey
-
 }
 
 check_args() {
@@ -243,9 +242,9 @@ check_args() {
         echo "Missing $argname"
         return 1
     fi
+
     return 0
 }
-
 
 adbstart() {
     pkg=$1
