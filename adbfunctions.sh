@@ -1,6 +1,10 @@
 #!/bin/sh
 
 DEFAULT_USERNAME=`whoami`
+export ANDTOOLS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+#echo "zero=\"$0\""
+#ANDTOOLS_DIR="$(dirname \"$0\")"
+echo "found ANDTOOLS_DIR=$ANDTOOLS_DIR"
 
 # To perform adb command on all devices, make
 # sure the environment variable "MULTI" is set
@@ -18,8 +22,7 @@ adbclear() {
 }
 
 adbdevices() {
-  DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-  ruby -I $DIR -e "
+  ruby -I $ANDTOOLS_DIR -e "
     require \"android_devices\"
 
     android_device = AndroidDevices.new
@@ -47,7 +50,7 @@ adbdevices() {
   "
 
   num=$?
-  serial=$(ruby -I $DIR -e "
+  serial=$(ruby -I $ANDTOOLS_DIR -e "
     require \"android_devices\"
 
     android_device = AndroidDevices.new
@@ -130,7 +133,7 @@ adbtype() {
   checkIfMissingArgument $1
 
   if [ $? -eq 0 ]; then
-    adb_wrapper shell input text $1
+    adb_wrapper shell input touchscreen text $1
   fi
 }
 
@@ -146,8 +149,7 @@ checkIfMissingArgument() {
 
 ensure_adb_serial_set() {
   if [ "$MULTI" == "" ]; then
-    DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-    ruby -I $DIR -e "
+    ruby -I $ANDTOOLS_DIR -e "
       require \"android_devices\"
 
       android_device = AndroidDevices.new
