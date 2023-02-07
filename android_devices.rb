@@ -7,7 +7,17 @@ class AndroidDevices
 
   def get_serial_list
     serials = `adb devices`.split("\n").drop(1) #drops the first string in adb devices (which is just text)
-    @devices = serials.map {|serial| serial.split("\t")[0]}
+    @devices = serials.map { |serial| 
+        items = serial.split("\t")
+        if items[1] == "offline"  then
+            ""
+        else
+            items[0]
+        end
+    }
+
+    @devices = @devices.reject { |i| i == "" }
+    @devices
   end
 
   def include?(value)
